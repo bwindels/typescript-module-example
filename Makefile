@@ -1,5 +1,5 @@
 all:
-	tsc main/main.ts --module commonjs --outDir build/
+	cd src/ && tsc main/main.ts --module commonjs --outDir ../build/ && cd ..
 clean:
 	rm -rf build/
 run:
