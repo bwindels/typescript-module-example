@@ -19,7 +19,7 @@ build:
 watch:
 	$(DAEMON_WATCHER) \
 	"$(TSC) --watch $(ENTRY_TS) --module commonjs --outDir $(JS_BUILD_DIR)" --cwd $(SRC_DIR) --name tsc \
-	"NODE_PATH=$(JS_BUILD_DIR) $(WATCHIFY) $(JS_BUILD_DIR)/$(ENTRY_JS) -o $(BUNDLE_FILE)" --name watchify
+	"NODE_PATH=$(JS_BUILD_DIR) $(WATCHIFY) $(JS_BUILD_DIR)/$(ENTRY_JS) -o $(BUNDLE_FILE) -v --debug" --name watchify
 clean:
 	rm -rf build/
 run: build
