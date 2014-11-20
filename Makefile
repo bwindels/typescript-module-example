@@ -1,12 +1,34 @@
-all:
-	cd src/ && tsc main/main.ts --module commonjs --outDir ../build/ && cd ..
+#configuration
+ENTRY_MODULE=main/main
+SRC_DIR = $(PWD)/src
+BUILD_DIR = $(PWD)/build
+BUNDLE_FILE = $(BUILD_DIR)/bundle.js
+#commands
+TSC = $(PWD)/node_modules/typescript/bin/tsc
+WATCHIFY = $(PWD)/node_modules/watchify/bin/cmd.js
+BROWSERIFY = $(PWD)/node_modules/browserify/bin/cmd.js
+DAEMON_WATCHER = node ./watcher.js
+#derived variables
+JS_BUILD_DIR = $(BUILD_DIR)/js
+ENTRY_TS=$(ENTRY_MODULE).ts
+ENTRY_JS=$(ENTRY_MODULE).js
+INITIAL_PWD=$(PWD)
+
+build:
+	cd $(SRC_DIR) && $(TSC) $(ENTRY_TS) --module commonjs --outDir $(JS_BUILD_DIR) && cd $(INITIAL_PWD) 
+watch:
+	$(DAEMON_WATCHER) \
+	"$(TSC) --watch $(ENTRY_TS) --module commonjs --outDir $(JS_BUILD_DIR)" --cwd $(SRC_DIR) --name tsc \
+	"NODE_PATH=$(JS_BUILD_DIR) $(WATCHIFY) $(JS_BUILD_DIR)/$(ENTRY_JS) -o $(BUNDLE_FILE)" --name watchify
 clean:
 	rm -rf build/
-run: all
-	NODE_PATH=build/ node build/main/main.js
-bundle: all
-	NODE_PATH=build/ browserify build/main/main.js -o build/bundle.js
+run: build
+	NODE_PATH=$(JS_BUILD_DIR) node $(JS_BUILD_DIR)/$(ENTRY_JS)
+bundle: build
+	NODE_PATH=$(JS_BUILD_DIR) $(BROWSERIFY) $(JS_BUILD_DIR)/$(ENTRY_JS) -o $(BUNDLE_FILE)
 build-test:
-	cd src/ && tsc ../test/*.test.ts --module commonjs --outDir ../build && cd ..
+	cd src/ && $(TSC) ../test/*.test.ts --module commonjs --outDir ../build && cd ..
 test: build-test
 	NODE_PATH=build/ nodeunit build/test/*.test.js
+setup:
+	npm install --dev
