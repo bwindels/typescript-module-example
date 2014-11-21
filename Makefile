@@ -10,7 +10,7 @@ TSC = $(PWD)/node_modules/typescript/bin/tsc
 WATCHIFY = $(PWD)/node_modules/watchify/bin/cmd.js
 WEBSERVER = $(PWD)/node_modules/asdf/bin/asdf
 BROWSERIFY = $(PWD)/node_modules/browserify/bin/cmd.js
-DAEMON_WATCHER = node ./watcher.js
+DAEMON_WATCHER = $(PWD)/node_modules/daemon-watch/daemon-watch.js
 NODEUNIT = $(PWD)/node_modules/nodeunit/bin/nodeunit
 #derived variables
 JS_BUILD_DIR = $(BUILD_DIR)/src
