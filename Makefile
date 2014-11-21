@@ -11,6 +11,7 @@ WATCHIFY = $(PWD)/node_modules/watchify/bin/cmd.js
 WEBSERVER = $(PWD)/node_modules/asdf/bin/asdf
 BROWSERIFY = $(PWD)/node_modules/browserify/bin/cmd.js
 DAEMON_WATCHER = node ./watcher.js
+NODEUNIT = $(PWD)/node_modules/nodeunit/bin/nodeunit
 #derived variables
 JS_BUILD_DIR = $(BUILD_DIR)/src
 ENTRY_TS=$(ENTRY_MODULE).ts
@@ -33,6 +34,6 @@ bundle: build
 build-test:
 	@cd src/ && $(TSC) ../test/*.test.ts --module commonjs --outDir ../build && cd ..
 test: build-test
-	@NODE_PATH=build/ nodeunit build/test/*.test.js
+	@NODE_PATH=build/ $(NODEUNIT) build/test/*.test.js
 setup:
 	npm install --no-optional --loglevel error --development
