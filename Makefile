@@ -12,7 +12,7 @@ WEBSERVER = $(PWD)/node_modules/asdf/bin/asdf
 BROWSERIFY = $(PWD)/node_modules/browserify/bin/cmd.js
 DAEMON_WATCHER = node ./watcher.js
 #derived variables
-JS_BUILD_DIR = $(BUILD_DIR)/js
+JS_BUILD_DIR = $(BUILD_DIR)/src
 ENTRY_TS=$(ENTRY_MODULE).ts
 ENTRY_JS=$(ENTRY_MODULE).js
 INITIAL_PWD=$(PWD)
@@ -31,8 +31,8 @@ run: build
 bundle: build
 	NODE_PATH=$(JS_BUILD_DIR) $(BROWSERIFY) $(JS_BUILD_DIR)/$(ENTRY_JS) -o $(BUNDLE_FILE) $(BROWSERIFY_FLAGS)
 build-test:
-	cd src/ && $(TSC) ../test/*.test.ts --module commonjs --outDir ../build && cd ..
+	@cd src/ && $(TSC) ../test/*.test.ts --module commonjs --outDir ../build && cd ..
 test: build-test
-	NODE_PATH=build/ nodeunit build/test/*.test.js
+	@NODE_PATH=build/ nodeunit build/test/*.test.js
 setup:
 	npm install --no-optional --loglevel error --development
