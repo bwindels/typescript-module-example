@@ -21,12 +21,15 @@ INITIAL_PWD=$(PWD)
 build:
 	@cd $(SRC_DIR) && $(TSC) $(ENTRY_TS) --module commonjs --outDir $(JS_BUILD_DIR) && cd $(INITIAL_PWD)
 watch:
-	@$(DAEMON_WATCHER) \
+#first touch entry js file so watchify doesn't exit when it is not there yet
+	@mkdir -p `dirname $(JS_BUILD_DIR)/$(ENTRY_JS)` && \
+	touch $(JS_BUILD_DIR)/$(ENTRY_JS) && \
+	$(DAEMON_WATCHER) \
 	"$(TSC) --watch $(ENTRY_TS) --module commonjs --outDir $(JS_BUILD_DIR)" --cwd $(SRC_DIR) --name tsc \
 	"NODE_PATH=$(JS_BUILD_DIR) $(WATCHIFY) $(JS_BUILD_DIR)/$(ENTRY_JS) -o $(BUNDLE_FILE) $(BROWSERIFY_FLAGS)" --name watchify \
-	"$(WEBSERVER) --port $(WEBSERVER_PORT)" --name webserver
+	"$(WEBSERVER) --port $(WEBSERVER_PORT)" --name asdf
 clean:
-	rm -rf build/
+	@rm -rf build/
 run: build
 	NODE_PATH=$(JS_BUILD_DIR) node $(JS_BUILD_DIR)/$(ENTRY_JS)
 bundle: build
