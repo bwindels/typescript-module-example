@@ -1,4 +1,4 @@
-import math = require('../src/main/math');
+import math = require('src/main/math');
 
 var tests = {
 	"test sum": function(test) {
