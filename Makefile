@@ -4,7 +4,7 @@ SRC_DIR = $(PWD)/src
 BUILD_DIR = $(PWD)/build
 BUNDLE_FILE = $(BUILD_DIR)/bundle.js
 WEBSERVER_PORT = 60000
-BROWSERIFY_FLAGS = -v --debug
+BROWSERIFY_FLAGS = --debug
 #commands
 TSC = $(PWD)/node_modules/typescript/bin/tsc
 WATCHIFY = $(PWD)/node_modules/watchify/bin/cmd.js
@@ -31,9 +31,10 @@ watch:
 clean:
 	@rm -rf build/
 run: build
-	NODE_PATH=$(JS_BUILD_DIR) node $(JS_BUILD_DIR)/$(ENTRY_JS)
+	@NODE_PATH=$(JS_BUILD_DIR) node $(JS_BUILD_DIR)/$(ENTRY_JS)
 bundle: build
-	NODE_PATH=$(JS_BUILD_DIR) $(BROWSERIFY) $(JS_BUILD_DIR)/$(ENTRY_JS) -o $(BUNDLE_FILE) $(BROWSERIFY_FLAGS)
+	@NODE_PATH=$(JS_BUILD_DIR) $(BROWSERIFY) $(JS_BUILD_DIR)/$(ENTRY_JS) -o $(BUNDLE_FILE) $(BROWSERIFY_FLAGS)
+	@echo "created $(BUNDLE_FILE)"
 build-test:
 	@cd src/ && $(TSC) ../test/*.test.ts --module commonjs --outDir ../build && cd ..
 test: build-test
